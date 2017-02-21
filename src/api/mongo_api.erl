@@ -17,7 +17,7 @@
 -export([
   connect/4,
   insert/3,
-  find/4, find/6,
+  find/4, find/7,
   find_one/5, find_one/4,
   update/5,
   delete/3,
@@ -60,14 +60,14 @@ delete(Topology, Collection, Selector) ->
 -spec find(atom() | pid(), collection(), selector(), projector()) ->
   {ok, cursor()} | [].
 find(Topology, Collection, Selector, Projector) ->
-  find(Topology, Collection, Selector, Projector, 0, 0).
+  find(Topology, Collection, Selector, Projector, 0, 0 ,#{}).
 
--spec find(atom() | pid(), collection(), selector(), projector(), integer(), integer()) ->
+-spec find(atom() | pid(), collection(), selector(), projector(), integer(), integer(), map()) ->
   {ok, cursor()} | [].
-find(Topology, Collection, Selector, Projector, Skip, Batchsize) ->
+find(Topology, Collection, Selector, Projector, Skip, Batchsize, Options) ->
   mongoc:transaction_query(Topology,
     fun(Conf = #{pool := Worker}) ->
-      Query = mongoc:find_query(Conf, Collection, Selector, Projector, Skip, Batchsize),
+      Query = mongoc:find_query(Conf, Collection, Selector, Projector, Skip, Batchsize ,Options),
       mc_worker_api:find(Worker, Query)
     end, #{}).
 

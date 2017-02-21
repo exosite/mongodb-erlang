@@ -21,7 +21,7 @@
   transaction/4,
   status/1,
   append_read_preference/2,
-  find_query/6,
+  find_query/7,
   count_query/4,
   find_one_query/5]).
 
@@ -99,15 +99,18 @@ find_one_query(#{server_type := ServerType, read_preference := RPrefs}, Coll, Se
   },
   mongos_query_transform(ServerType, Q, RPrefs).
 
--spec find_query(map(), collection(), selector(), projector(), integer(), integer()) -> query().
+-spec find_query(map(), collection(), selector(), projector(), integer(), integer(), map()) -> query().
 find_query(#{server_type := ServerType, read_preference := RPrefs},
-    Coll, Selector, Projector, Skip, BatchSize) ->
+    Coll, Selector, Projector, Skip, BatchSize, Options) ->
   Q = #'query'{
     collection = Coll,
     selector = Selector,
     projector = Projector,
     skip = Skip,
-    batchsize = BatchSize
+    batchsize = BatchSize,
+    tailablecursor = maps:get(tailablecursor, Options, false),
+    awaitdata = maps:get(awaitdata, Options, false),
+    nocursortimeout = maps:get(nocursortimeout, Options, false)
   },
   mongos_query_transform(ServerType, Q, RPrefs).
 
