@@ -21,13 +21,9 @@
 
 -spec read(pid() | atom(), query()) -> [] | pid().
 read(Connection, Request = #'query'{collection = Collection, batchsize = BatchSize}) ->
-  case request_worker(Connection, Request) of
-    {_, []} ->
-      [];
-    {Cursor, Batch} ->
-      mc_cursor:start_link(Connection, Collection, Cursor, BatchSize, Batch)
-  end.
-
+  {Cursor, Batch} = request_worker(Connection, Request),
+  mc_cursor:start_link(Connection, Collection, Cursor, BatchSize, Batch).
+      
 -spec read_one(pid() | atom(), query()) -> undefined | map().
 read_one(Connection, Request) ->
   {0, Docs} = request_worker(Connection, Request#'query'{batchsize = -1}),
