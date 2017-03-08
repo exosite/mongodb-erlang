@@ -67,7 +67,7 @@ process_responses(Responses, RequestStorage) ->
   {ok | {error, any()}, integer(), pos_integer()}.
 make_request(Socket, NetModule, Database, Request) ->
   {Packet, Id} = encode_request(Database, Request),
-  io:format("-----> sending  : ~p ~p~n" ,[erlang:system_time(millisecond) ,Socket]),
+  io:format("-----> sending  : ~p ~p ~p~n" ,[erlang:system_time(millisecond) ,Socket ,Request]),
   {NetModule:send(Socket, Packet), byte_size(Packet), Id}.
 
 update_dbcoll({Db, _}, Coll) -> {Db, Coll};
