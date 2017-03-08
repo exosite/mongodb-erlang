@@ -177,6 +177,7 @@ next_i(#state{batch = [Doc | Rest]} = State, _Timeout) ->
 next_i(#state{batch = [], cursor = 0} = State, _Timeout) ->
   {{}, State};
 next_i(#state{batch = []} = State, Timeout) ->
+  io:format("----> next_i~n"),
   Reply = gen_server:call(
     State#state.connection,
     #getmore{
