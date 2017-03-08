@@ -94,7 +94,7 @@ handle_cast(_, State) ->
 
 %% @hidden
 handle_info({Net, _Socket, Data}, State = #state{request_storage = RequestStorage}) when Net =:= tcp; Net =:= ssl ->
-  io:format("-----> receiving: ~p~n" ,[erlang:system_time(millisecond)]),
+  io:format("-----> receiving: ~p ~p~n" ,[erlang:system_time(millisecond) ,_Socket]),
   Buffer = <<(State#state.buffer)/binary, Data/binary>>,
   {Responses, Pending} = mc_worker_logic:decode_responses(Buffer),
   UReqStor = mc_worker_logic:process_responses(Responses, RequestStorage),
