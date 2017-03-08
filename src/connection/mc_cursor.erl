@@ -185,7 +185,7 @@ next_i(#state{batch = []} = State, Timeout) ->
       cursorid = State#state.cursor
     },
     Timeout),
-  io:format("----> next_i: ~p~n" ,[Reply]),
+  io:format("----> next_i: ~p~n" ,[Timeout]),
   Cursor = Reply#reply.cursorid,
   Batch = Reply#reply.documents,
   next_i(State#state{cursor = Cursor, batch = Batch}, Timeout).
