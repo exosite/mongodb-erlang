@@ -94,6 +94,7 @@ recv_all(Socket, Timeout, NetModule) ->
   recv_all(Socket, Timeout, NetModule, <<>>).
 recv_all(Socket, Timeout, NetModule, Rest) ->
   {ok, Packet} = NetModule:recv(Socket, 0, Timeout),
+  io:format("-----> recv_all: ~p ~p~n" ,[Socket ,Packet]),
   case mc_worker_logic:decode_responses(<<Rest/binary, Packet/binary>>) of
     {[], Unfinished} -> recv_all(Socket, Timeout, NetModule, Unfinished);
     {Responses, _} -> Responses
